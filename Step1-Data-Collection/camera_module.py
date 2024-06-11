@@ -51,7 +51,7 @@ class CameraController:
             raise RuntimeError("Error: Camera could not be opened.")
         print("Camera successfully initialized.")
 
-    def get_img(self, file_name, size=None):
+    def get_img(self, file_name, size=[240,120]):
         """
         Capture an image and optionally save it with the provided file name.
 
