@@ -45,14 +45,11 @@ class CameraController:
         Initialize the camera.
 
         This method sets up the camera attribute and starts the camera.
-
-        Args:
-        None
-
-        Returns:
-        None
         """
         self.camera = cv2.VideoCapture(0)
+        if not self.camera.isOpened():
+            raise RuntimeError("Error: Camera could not be opened.")
+        print("Camera successfully initialized.")
 
     def get_img(self, file_name, size=None):
         """
@@ -61,29 +58,30 @@ class CameraController:
         Args:
         file_name (str): The name to save the image file as, without file extension.
         size (tuple): Optional tuple specifying the desired width and height of the image (width, height).
-        return_image (bool): Optional flag to return the captured image as an array instead of saving it.
 
         Returns:
-        None or np.ndarray: If `return_image` is True, returns the captured image as a NumPy array.
+        frame (np.ndarray): The captured image as a NumPy array.
         """
         ret, frame = self.camera.read()
+        if not ret:
+            raise RuntimeError("Error: Could not read frame from camera.")
+        if frame is None or frame.size == 0:
+            raise RuntimeError("Error: Captured frame is empty.")
+
         if size is not None:
             frame = cv2.resize(frame, size)
         cv2.imwrite(f"{file_name}.jpg", frame)
+        print(f"Image saved as {file_name}.jpg")
 
         return frame
 
     def release_camera(self):
         """
         Release the camera resource.
-
-        Args:
-        None
-
-        Returns:
-        None
         """
-        self.camera.release()
+        if self.camera is not None:
+            self.camera.release()
+            print("Camera released.")
 
 def main():
     """
@@ -94,20 +92,22 @@ def main():
 
     This function is intended for testing purposes and should not be used
     when the module is imported elsewhere.
-
-    Args:
-    None
-
-    Returns:
-    None
     """
     camera_controller = CameraController()
-    camera_controller.init_camera()
-    count = 0 
-    while count < 10:
-        camera_controller.get_img(f"test_{count}", size=[240, 120])
-        count += 1
-    camera_controller.release_camera()
+    try:
+        camera_controller.init_camera()
+        count = 0
+        while count < 10:
+            try:
+                camera_controller.get_img(f"test_{count}", size=(240, 120))
+            except RuntimeError as e:
+                print(e)
+                break
+            count += 1
+    except RuntimeError as e:
+        print(e)
+    finally:
+        camera_controller.release_camera()
 
 if __name__ == '__main__':
     main()
