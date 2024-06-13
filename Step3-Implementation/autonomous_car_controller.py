@@ -48,10 +48,16 @@ from uart_module import UartController
 from picamera_module import PiCameraController
 
 # Initializing modules
-uart_controller = UartController("/dev/ttyS0", 9600)
-camera = PiCameraController()
-camera.pi_cam_init()
-model = load_model('/home/pi/Desktop/My Files/RpiRobot/model_V1.h5')
+SERIAL_PORT = "/dev/ttyS0"
+BAUD_RATE = 9600
+uart_controller = UartController(SERIAL_PORT, BAUD_RATE)
+
+camera_controller = PiCameraController()
+roi = (0.0, 0.2, 0.8, 0.8) #ratio of interest
+camera_controller.pi_cam_init(roi)
+
+model_path = None
+model = load_model(model_path)
 
 def preProcess(img):
     """
@@ -63,7 +69,6 @@ def preProcess(img):
     Returns:
         numpy.ndarray: Preprocessed image.
     """
-    img = img[54:120, :, :]  # Crop the image
     img = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)  # Convert to YUV color space
     img = cv2.GaussianBlur(img, (3, 3), 0)  # Apply Gaussian blur
     img = cv2.resize(img, (200, 66))  # Resize the image

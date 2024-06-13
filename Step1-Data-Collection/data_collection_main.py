@@ -86,7 +86,8 @@ key_controller.key_press_init()
 uart_controller = UartController(SERIAL_PORT, BAUD_RATE)
 
 camera_controller = PiCameraController()
-camera_controller.pi_cam_init()
+roi = (0.0, 0.2, 0.8, 0.8) #ratio of interest
+camera_controller.pi_cam_init(roi)
 
 def get_key_press():
     """
