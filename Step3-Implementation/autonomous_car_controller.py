@@ -117,8 +117,8 @@ def main():
             img = preProcess(img)  # Preprocess the image
             img = np.expand_dims(img, axis=0)  # Add batch dimension
             prediction = model.predict(img)  # Predict angle and speed
-            angle = float(prediction[0][0])  # Extract angle
-            speed = float(prediction[0][1])  # Extract speed
+            speed = float(prediction[0][0])  # Extract speed
+            angle = float(prediction[0][1])  # Extract angle
 
             print(f"Angle: {angle}, Speed: {speed}")  # Print values
             send_movement_commands()

@@ -35,10 +35,10 @@ Functions:
 
 Key Presses:
 ------------
-- RIGHT : Increase speed and steer right.
-- LEFT  : Increase speed and steer left.
-- UP    : Increase speed.
-- DOWN  : Decrease speed.
+- RIGHT : Steer right.
+- LEFT  : Steer left.
+- UP    : Move forward.
+- DOWN  : Move backward.
 - r     : Start or stop recording.
 - s     : Stop the car.
 - k     : Terminate the program.
@@ -126,16 +126,16 @@ def update_movement_controls():
     """
     global speed, angle, record, done, key_val, key_old
     if key_val == "RIGHT":
-        speed = 0.6
+        speed = 0.5
         angle = speed
     elif key_val == "LEFT":
-        speed = 0.6
+        speed = 0.5
         angle = -speed
     elif key_val == "UP":
-        speed = 0.4
+        speed = 0.5
         angle = 0
     elif key_val == "DOWN":
-        speed = -0.4
+        speed = -0.5
         angle = 0
     elif key_val == "s":
         speed = 0
